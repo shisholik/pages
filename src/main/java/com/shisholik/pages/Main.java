@@ -1,17 +1,14 @@
 package com.shisholik.pages;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.shisholik.pages.api.AuthService;
-import com.shisholik.pages.user.UserEntity;
+import com.shisholik.pages.api.BaseResource;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
-import org.apache.cxf.service.invoker.BeanInvoker;
-import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ser.FilterProvider;
-import org.codehaus.jackson.map.ser.impl.SimpleBeanPropertyFilter;
-import org.codehaus.jackson.map.ser.impl.SimpleFilterProvider;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
@@ -19,7 +16,7 @@ public class Main {
 
 
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
-        sf.setResourceClasses(AuthService.class, UserEntity.class);
+        sf.setResourceClasses(AuthService.class, BaseResource.class);
         sf.setResourceProvider(AuthService.class, new SingletonResourceProvider(new AuthService()));
         sf.setAddress("http://localhost:8080/");
         //sf.setServiceClass(AuthService.class);

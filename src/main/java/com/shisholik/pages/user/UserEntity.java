@@ -1,16 +1,15 @@
 package com.shisholik.pages.user;
 
 import com.shisholik.pages.BaseEntity;
-import org.codehaus.jackson.map.annotate.JsonFilter;
-import org.hibernate.annotations.NaturalId;
 
-import javax.annotation.Generated;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
 @Table
-@JsonFilter("myFilter")
 public class UserEntity extends BaseEntity {
 
 

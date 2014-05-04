@@ -1,25 +1,27 @@
 package com.shisholik.pages.user;
 
-import org.codehaus.jackson.map.annotate.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.shisholik.pages.api.UserResource;
+
 
 @JsonFilter("myFilter")
 public class CustomStructure {
-    private UserEntity user;
+    private UserResource user;
     private String test;
 
     public CustomStructure() {
     }
 
-    public CustomStructure(UserEntity user, String test) {
+    public CustomStructure(UserResource user, String test) {
         this.user = user;
         this.test = test;
     }
 
-    public UserEntity getUser() {
+    public UserResource getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(UserResource user) {
         this.user = user;
     }
 

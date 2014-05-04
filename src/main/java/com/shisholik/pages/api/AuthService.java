@@ -1,17 +1,14 @@
 package com.shisholik.pages.api;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.shisholik.pages.user.CustomStructure;
 import com.shisholik.pages.user.UserEntity;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
 import javax.ws.rs.*;
 import java.util.Arrays;
 
 @Path("/")
 @Produces("application/json")
-@WebService
 public class AuthService {
 
     @POST
@@ -36,14 +33,26 @@ public class AuthService {
         return "Ok";
     }
 
+    @JsonView(Views.ExtendedPublic.class)
     @Path("/123")
     @GET
     public CustomStructure getUser(@QueryParam("login") String login) {
+        return getCustomStructure();
+    }
+
+    @JsonView(Views.Public.class)
+    @Path("/1231")
+    @GET
+    public CustomStructure getUser1(@QueryParam("login") String login) {
+        return getCustomStructure();
+    }
+
+    private CustomStructure getCustomStructure() {
         UserEntity userEntity = new UserEntity();
         userEntity.setLogin("awdawd");
         userEntity.setName("name");
         userEntity.setPassword_md5("password");
 
-        return new CustomStructure(userEntity,"wdwadawd");
+        return new CustomStructure(new UserResource(userEntity), "wdwadawd");
     }
 }
