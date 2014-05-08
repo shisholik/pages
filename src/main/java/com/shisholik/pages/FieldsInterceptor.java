@@ -5,29 +5,28 @@ import com.shisholik.pages.filters.DefaultFilterList;
 import com.shisholik.pages.filters.DefaultFilterManager;
 import com.shisholik.pages.filters.FilterList;
 import com.sun.istack.NotNull;
-import org.apache.cxf.binding.soap.interceptor.SoapPreProtocolOutInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.eclipse.jetty.server.Request;
+
+import javax.servlet.ServletRequest;
 
 public class FieldsInterceptor extends AbstractPhaseInterceptor<Message> {
 
-
     public FieldsInterceptor() {
         super(Phase.INVOKE);
-        addBefore(SoapPreProtocolOutInterceptor.class.getName());
     }
 
+    @Override
     public void handleMessage(Message message) {
-        String fields = ((Request) message.get("HTTP.REQUEST")).getParameter("fields");
+        String fields = ((ServletRequest) message.get("HTTP.REQUEST")).getParameter("fields");
         FilterList instance;
         if (fields != null) {
             instance = handleFieldsList(fields);
         } else {
             instance = AllFiltersAcceptedList.getInstance();
         }
-        message.getExchange().put("fields", new DefaultFilterManager(instance));
+        message.getExchange().put("fields", new DefaultFilterManager(instance, fields));
     }
 
     public FilterList handleFieldsList(@NotNull String fields) {
@@ -46,7 +45,6 @@ public class FieldsInterceptor extends AbstractPhaseInterceptor<Message> {
                 case ',':
                     if (nestedCount == 0) {
 
-
                         if (nestedStartedIndex != -1) {
                             name = fields.substring(startIndex, nestedStartedIndex);
                             FilterList filterList = handleFieldsList(fields.substring(nestedStartedIndex + 1, i - 1));
@@ -57,7 +55,6 @@ public class FieldsInterceptor extends AbstractPhaseInterceptor<Message> {
                             defaultFilterList.add(name);
                         }
                         startIndex = i + 1;
-
                     }
                     break;
                 case '(':
@@ -79,13 +76,10 @@ public class FieldsInterceptor extends AbstractPhaseInterceptor<Message> {
             defaultFilterList.add(name);
         }
 
-
         return defaultFilterList;
-
     }
 
+    @Override
     public void handleFault(Message message) {
     }
-
-
 }
