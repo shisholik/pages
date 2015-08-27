@@ -1,18 +1,24 @@
 package com.shisholik.pages;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Table
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class BaseEntity implements Serializable {
     private long id;
     private Date createdAt;
+    private Date lastModified;
 
-    @Id
-    @GeneratedValue
+    public Date getLastModified() {
+        if (lastModified == null) {
+            return new Date(0);
+        }
+        return lastModified;
+    }
+
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
+    }
+
     public long getId() {
         return id;
     }
@@ -29,7 +35,6 @@ public class BaseEntity implements Serializable {
         this.createdAt = createdAt;
     }
 
-    @PrePersist
     protected void onCreate() {
         createdAt = new Date();
     }

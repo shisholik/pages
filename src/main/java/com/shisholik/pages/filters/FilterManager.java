@@ -6,4 +6,8 @@ public interface FilterManager {
     void pop();
 
     boolean contains(String propertyName);
+
+    void setInternal(boolean isInternal);
+
+    boolean isInternal();
 }
